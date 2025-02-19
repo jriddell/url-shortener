@@ -66,7 +66,7 @@ app.get('/s3', async (req, res) => {
         const response = await s3Client.send(command);
         console.log("Success", response.Buckets);
         const page = `<h1>URL Shortener S3 Test</h1>
-          ${response.Buckets}
+          ${response.Buckets?.map((b) => ` • ${b.Name}`).join("<p>")}
           `
         res.send(page)
     } catch (err) {
@@ -74,7 +74,7 @@ app.get('/s3', async (req, res) => {
         const page = `<h1>URL Shortener S3 Test</h1>
             Error ${err}`
         res.send(page)
-    }          
+    }
 })
 
 app.listen(3000, () =>
