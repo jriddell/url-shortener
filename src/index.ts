@@ -17,10 +17,26 @@ app.get('/', async (req, res) => {
     res.send(page)
 })
 
+// TODO This needs to check if it is already submitted
+// TODO actually shorten the URL
 app.get('/submit', async (req, res) => {
     const { url } = req.query
+    if (typeof url !== "string") {
+        res.send("<p>No URL submitted</p>")
+    }
+    const fullUrl = <string>url
+    const shortUrl = fullUrl
+    const result = await prisma.url.create({
+        data: {
+            fullUrl: fullUrl,
+            shortUrl: shortUrl
+        },
+    })
+
     const page = `<h1>URL Shortener</h1>
-    You submitted ${url}
+    <p>You submitted ${fullUrl}</p>
+    <p>It is now ${shortUrl}</p>
+    <p>Result is ${result}.</p>
     `
     res.send(page)
 })
