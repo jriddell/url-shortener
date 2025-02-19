@@ -41,6 +41,21 @@ app.get('/submit', async (req, res) => {
     res.send(page)
 })
 
+app.get(`/get/:url`, async (req, res) => {
+    const { url } = req.params
+    const shortUrl = <string>url
+
+    const result = await prisma.url.findUnique({
+        where: { shortUrl: shortUrl },
+    })
+    const theUrl = result?.fullUrl
+    const page = `<h1>URL Shortener</h1>
+    <p>You submitted ${shortUrl}</p>
+    <p>The URL is <tt>${theUrl}</tt></p>
+    `
+    res.send(page)
+})
+
 app.listen(3000, () =>
   console.log('REST API server ready at: http://localhost:3000'),
 )
