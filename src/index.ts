@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
+import { S3Client, ListBucketsCommand } from "@aws-sdk/client-s3";
 
 const prisma = new PrismaClient()
 const app = express()
@@ -54,6 +55,26 @@ app.get(`/get/:url`, async (req, res) => {
     <p>The URL is <tt>${theUrl}</tt></p>
     `
     res.send(page)
+})
+
+app.get('/s3', async (req, res) => {
+    const s3Client = new S3Client({ });
+
+    try {
+        const input = {};
+        const command = new ListBucketsCommand(input);
+        const response = await s3Client.send(command);
+        console.log("Success", response.Buckets);
+        const page = `<h1>URL Shortener S3 Test</h1>
+          ${response.Buckets}
+          `
+        res.send(page)
+    } catch (err) {
+        console.log("Error", err);
+        const page = `<h1>URL Shortener S3 Test</h1>
+            Error ${err}`
+        res.send(page)
+    }          
 })
 
 app.listen(3000, () =>
