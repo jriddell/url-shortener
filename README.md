@@ -6,3 +6,6 @@ The stuff of a million tests
 * sudo apt install docker docker-compose-v2
 * docker compose up -d
 * npx prisma migrate dev --name init
+
+Run with
+* npx ts-node src/index.ts
